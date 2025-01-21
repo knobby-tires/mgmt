@@ -1,0 +1,54 @@
+import "fmt"
+
+# To verify functionality, use the following curl commands:  
+
+# - `curl http://localhost:8080/test1` (for Test 1)  
+# - `curl http://localhost:8080/test2` (for Test 2)  
+# - `curl http://localhost:8080/dir/index` (for directory listing)
+
+# Create a set of test files with different configurations
+file "/tmp/mgmt-test1.txt" {
+    content => "Hello from Test 1!",
+    state => $const.res.file.state.exists,
+}
+
+file "/tmp/mgmt-test2.txt" {
+    content => "Hello from Test 2!",
+    state => $const.res.file.state.exists,
+}
+
+# Test directory serving
+file "/tmp/mgmt-test-dir/" {
+    state => $const.res.file.state.exists,
+}
+
+file "/tmp/mgmt-test-dir/index.txt" {
+    content => "Hello from Directory!",
+    state => $const.res.file.state.exists,
+}
+
+# Create the HTTP server
+http:server ":8080" {
+    address => ":8080",
+}
+
+# Test multiple files being served from the same server
+http:file "/test1" {
+    path => "/tmp/mgmt-test1.txt",
+}
+
+http:file "/test2" {
+    path => "/tmp/mgmt-test2.txt",
+}
+
+# Test directory serving
+http:file "/dir/" {
+    path => "/tmp/mgmt-test-dir/",
+}
+
+# Test serving a file from within the directory
+http:file "/dir/index" {
+    path => "/tmp/mgmt-test-dir/index.txt",
+}
+
+
