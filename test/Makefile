@@ -1,5 +1,5 @@
 # Mgmt
-# Copyright (C) 2013-2024+ James Shubin and the project contributors
+# Copyright (C) James Shubin and the project contributors
 # Written by James Shubin <james@shubin.ca> and the project contributors
 #
 # This program is free software: you can redistribute it and/or modify
@@ -32,11 +32,11 @@ SHELL = /usr/bin/env bash
 
 all: build
 
-build: comment_parser
+build: reflowed-comments
 
 clean:
-	@rm -f comment_parser || true
+	@rm -f reflowed-comments || true
 
-comment_parser: comment_parser.go
-	@echo "Generating: comment_parser..."
-	go build comment_parser.go
+reflowed-comments: reflowed-comments.go
+	@echo "Generating: reflowed-comments..."
+	go build reflowed-comments.go

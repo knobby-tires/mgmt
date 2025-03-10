@@ -1,5 +1,5 @@
 // Mgmt
-// Copyright (C) 2013-2024+ James Shubin and the project contributors
+// Copyright (C) James Shubin and the project contributors
 // Written by James Shubin <james@shubin.ca> and the project contributors
 //
 // This program is free software: you can redistribute it and/or modify
@@ -193,7 +193,7 @@ type AwsEc2Res struct {
 
 	// UserData is used to run bash and cloud-init commands on first launch.
 	// See http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html
-	// for documantation and examples.
+	// for documentation and examples.
 	UserData string `lang:"userdata" yaml:"userdata"`
 
 	client *ec2.EC2 // client session for AWS API calls

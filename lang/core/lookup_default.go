@@ -1,5 +1,5 @@
 // Mgmt
-// Copyright (C) 2013-2024+ James Shubin and the project contributors
+// Copyright (C) James Shubin and the project contributors
 // Written by James Shubin <james@shubin.ca> and the project contributors
 //
 // This program is free software: you can redistribute it and/or modify
@@ -97,8 +97,8 @@ func (obj *LookupDefaultFunc) Build(typ *types.Type) (*types.Type, error) {
 		return nil, fmt.Errorf("input type must be of kind func")
 	}
 
-	if len(typ.Ord) < 1 {
-		return nil, fmt.Errorf("the lookup function needs at least one arg") // actually 2 or 3
+	if len(typ.Ord) != 3 {
+		return nil, fmt.Errorf("the lookup function needs three args")
 	}
 	tListOrMap, exists := typ.Map[typ.Ord[0]]
 	if !exists || tListOrMap == nil {
@@ -108,16 +108,30 @@ func (obj *LookupDefaultFunc) Build(typ *types.Type) (*types.Type, error) {
 		return nil, fmt.Errorf("first arg must have a type")
 	}
 
+	name := ""
 	if tListOrMap.Kind == types.KindList {
-		obj.fn = &ListLookupDefaultFunc{} // set it
-		return obj.fn.Build(typ)
+		name = ListLookupDefaultFuncName
 	}
 	if tListOrMap.Kind == types.KindMap {
-		obj.fn = &MapLookupDefaultFunc{} // set it
-		return obj.fn.Build(typ)
+		name = MapLookupDefaultFuncName
+	}
+	if name == "" {
+		return nil, fmt.Errorf("we must lookup from either a list or a map")
 	}
 
-	return nil, fmt.Errorf("we must lookup from either a list or a map")
+	f, err := funcs.Lookup(name)
+	if err != nil {
+		// programming error
+		return nil, err
+	}
+	bf, ok := f.(interfaces.BuildableFunc)
+	if !ok {
+		// programming error
+		return nil, fmt.Errorf("not a BuildableFunc")
+	}
+	obj.fn = bf
+
+	return obj.fn.Build(typ)
 }
 
 // Validate tells us if the input struct takes a valid form.

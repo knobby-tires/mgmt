@@ -1,5 +1,5 @@
 // Mgmt
-// Copyright (C) 2013-2024+ James Shubin and the project contributors
+// Copyright (C) James Shubin and the project contributors
 // Written by James Shubin <james@shubin.ca> and the project contributors
 //
 // This program is free software: you can redistribute it and/or modify
@@ -228,7 +228,7 @@ func (obj *State) Init() error {
 				if !ok {
 					continue
 				}
-				// pass in information on requestor...
+				// pass in information on requester...
 				if err := r1.GraphQueryAllowed(
 					engine.GraphQueryableOptionKind(res.Kind()),
 					engine.GraphQueryableOptionName(res.Name()),
@@ -243,7 +243,7 @@ func (obj *State) Init() error {
 					if !ok {
 						continue
 					}
-					// pass in information on requestor...
+					// pass in information on requester...
 					if err := r2.GraphQueryAllowed(
 						engine.GraphQueryableOptionKind(res.Kind()),
 						engine.GraphQueryableOptionName(res.Name()),

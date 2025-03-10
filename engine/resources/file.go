@@ -1,5 +1,5 @@
 // Mgmt
-// Copyright (C) 2013-2024+ James Shubin and the project contributors
+// Copyright (C) James Shubin and the project contributors
 // Written by James Shubin <james@shubin.ca> and the project contributors
 //
 // This program is free software: you can redistribute it and/or modify
@@ -145,7 +145,7 @@ type FileRes struct {
 	// Source specifies the source contents for the file resource. It cannot
 	// be combined with the Content or Fragments parameters. It must be an
 	// absolute path, and it can point to a file or a directory. If it
-	// points to a file, then that will will be copied throuh directly. If
+	// points to a file, then that will will be copied through directly. If
 	// it points to a directory, then it will copy the directory "rsync
 	// style" onto the file destination. As a result, if this is a file,
 	// then the main file res must be a file, and if it is a directory, then
@@ -326,6 +326,13 @@ func (obj *FileRes) Validate() error {
 		// absolute paths begin with a slash
 		if !strings.HasPrefix(frag, "/") {
 			return fmt.Errorf("the frag (`%s`) isn't an absolute path", frag)
+		}
+		// If the file is inside one of our fragment dirs, then this
+		// would make an infinite loop mess. We can't prevent this
+		// happening in other ways with multiple dirs doing this for
+		// each other, but we can at least catch the common case.
+		if util.HasPathPrefix(obj.getPath(), frag) {
+			return fmt.Errorf("inside a frag (`%s`)", frag)
 		}
 	}
 
@@ -636,7 +643,7 @@ func (obj *FileRes) fileCheckApply(ctx context.Context, apply bool, src io.ReadS
 				return "", false, err
 			}
 			sha256sum = hex.EncodeToString(hash.Sum(nil))
-			// since we re-use this src handler below, it is
+			// since we reuse this src handler below, it is
 			// *critical* to seek to 0, or we'll copy nothing!
 			if n, err := src.Seek(0, 0); err != nil || n != 0 {
 				return sha256sum, false, err
@@ -666,7 +673,7 @@ func (obj *FileRes) fileCheckApply(ctx context.Context, apply bool, src io.ReadS
 	if err != nil {
 		return sha256sum, false, err
 	}
-	defer dstFile.Close() // TODO: is this redundant because of the earlier defered Close() ?
+	defer dstFile.Close() // TODO: is this redundant because of the earlier deferred Close() ?
 
 	if isFile { // set mode because it's a new file
 		if err := dstFile.Chmod(srcStat.Mode()); err != nil {

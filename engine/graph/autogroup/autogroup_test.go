@@ -1,5 +1,5 @@
 // Mgmt
-// Copyright (C) 2013-2024+ James Shubin and the project contributors
+// Copyright (C) James Shubin and the project contributors
 // Written by James Shubin <james@shubin.ca> and the project contributors
 //
 // This program is free software: you can redistribute it and/or modify
@@ -301,7 +301,7 @@ Loop:
 
 	// check edges
 	for v1 := range g1.Adjacency() { // for each vertex in g1
-		v2 := m[v1] // lookup in map to get correspondance
+		v2 := m[v1] // lookup in map to get correspondence
 		// g1.Adjacency()[v1] corresponds to g2.Adjacency()[v2]
 		if e1, e2 := len(g1.Adjacency()[v1]), len(g2.Adjacency()[v2]); e1 != e2 {
 			r1 := v1.(engine.Res)

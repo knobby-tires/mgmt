@@ -1,5 +1,5 @@
 // Mgmt
-// Copyright (C) 2013-2024+ James Shubin and the project contributors
+// Copyright (C) James Shubin and the project contributors
 // Written by James Shubin <james@shubin.ca> and the project contributors
 //
 // This program is free software: you can redistribute it and/or modify
@@ -134,7 +134,7 @@ func (ag *baseGrouper) VertexNext() (v1, v2 pgraph.Vertex, err error) {
 	return
 }
 
-// VertexCmp can be used in addition to an overridding implementation.
+// VertexCmp can be used in addition to an overriding implementation.
 func (ag *baseGrouper) VertexCmp(v1, v2 pgraph.Vertex) error {
 	if v1 == nil || v2 == nil {
 		return fmt.Errorf("the vertex is nil")

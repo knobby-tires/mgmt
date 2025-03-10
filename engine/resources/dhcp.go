@@ -1,5 +1,5 @@
 // Mgmt
-// Copyright (C) 2013-2024+ James Shubin and the project contributors
+// Copyright (C) James Shubin and the project contributors
 // Written by James Shubin <james@shubin.ca> and the project contributors
 //
 // This program is free software: you can redistribute it and/or modify
@@ -1863,7 +1863,7 @@ func (obj *DHCPRangeRes) handler4(data *HostData) (func(*dhcpv4.DHCPv4, *dhcpv4.
 
 	// FIXME: Run this somewhere for now, eventually it should get scheduled
 	// to run in the returned duration of time. This way, it would clean old
-	// peristed entries when they're stale, not when a new request comes in.
+	// persisted entries when they're stale, not when a new request comes in.
 	if _, err := obj.leaseClean(); err != nil {
 		return nil, errwrap.Wrapf(err, "clean error")
 	}

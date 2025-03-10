@@ -1,5 +1,5 @@
 // Mgmt
-// Copyright (C) 2013-2024+ James Shubin and the project contributors
+// Copyright (C) James Shubin and the project contributors
 // Written by James Shubin <james@shubin.ca> and the project contributors
 //
 // This program is free software: you can redistribute it and/or modify
@@ -806,7 +806,7 @@ func (obj *Engine) process(ctx context.Context) (reterr error) {
 	// Check each leaf and make sure they're all ready to send, for us to
 	// send anything to ag channel. In addition, we need at least one send
 	// message from any of the valid isLeaf nodes. Since this only runs if
-	// everyone is loaded, we just need to check for activty leaf nodes.
+	// everyone is loaded, we just need to check for activity leaf nodes.
 	obj.stateMutex.Lock()
 	for node := range obj.activity {
 		if obj.leafSend {
@@ -1240,6 +1240,8 @@ func (obj *Engine) Run(ctx context.Context) (reterr error) {
 				}
 
 				fn := func(nodeCtx context.Context) (reterr error) {
+					// NOTE: Comment out this defer to make
+					// debugging a lot easier.
 					defer func() {
 						// catch programming errors
 						if r := recover(); r != nil {

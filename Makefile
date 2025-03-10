@@ -1,5 +1,5 @@
 # Mgmt
-# Copyright (C) 2013-2024+ James Shubin and the project contributors
+# Copyright (C) James Shubin and the project contributors
 # Written by James Shubin <james@shubin.ca> and the project contributors
 #
 # This program is free software: you can redistribute it and/or modify
@@ -191,13 +191,6 @@ path: ## create working paths
 deps: ## install system and golang dependencies
 	./misc/make-deps.sh
 
-run: ## run mgmt
-	find . -maxdepth 1 -type f -name '*.go' -not -name '*_test.go' | xargs go run -ldflags "-X main.program=$(PROGRAM) -X main.version=$(SVERSION)"
-
-# include race flag
-race:
-	find . -maxdepth 1 -type f -name '*.go' -not -name '*_test.go' | xargs go run -race -ldflags "-X main.program=$(PROGRAM) -X main.version=$(SVERSION)"
-
 generate:
 	go generate
 
@@ -219,6 +212,10 @@ build: $(PROGRAM)
 
 build-debug: LDFLAGS=
 build-debug: $(PROGRAM)
+
+# if you're using the bad/dev branch, you might want this too!
+baddev: BUILD_FLAGS = -tags 'noaugeas novirt'
+baddev: $(PROGRAM)
 
 # pattern rule target for (cross)building, mgmt-OS-ARCH will be expanded to the correct build
 # extract os and arch from target pattern
@@ -643,5 +640,6 @@ funcgen: lang/core/generated_funcs.go
 lang/core/generated_funcs.go: lang/funcs/funcgen/*.go lang/core/funcgen.yaml lang/funcs/funcgen/templates/generated_funcs.go.tpl
 	@echo "Generating: funcs..."
 	@go run `find lang/funcs/funcgen/ -maxdepth 1 -type f -name '*.go' -not -name '*_test.go'` -templates=lang/funcs/funcgen/templates/generated_funcs.go.tpl >/dev/null
+	@gofmt -s -w $@
 
 # vim: ts=8
